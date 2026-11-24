@@ -1,0 +1,41 @@
+{
+  "epsg": 25830,
+  "square": {
+    "x0": 439472.0,
+    "y0": 4473603.5,
+    "x1": 440496.0,
+    "y1": 4474627.5,
+    "size_m": 1024.0
+  },
+  "centre": {
+    "x": 439983.9,
+    "y": 4474115.5,
+    "lat": 40.4155,
+    "lon": -3.7074,
+    "name": "Plaza Mayor, Madrid"
+  },
+  "ortho": {
+    "file": "plaza-mayor-ortho-4096.jpg",
+    "px": 4096,
+    "res_m": 0.25,
+    "fallback": "plaza-mayor-ortho-2048.jpg",
+    "source": "PNOA Maxima Actualidad 07/2023, sheets 0559-1 + 0559-3",
+    "licence": "CC-BY 4.0",
+    "attribution": "PNOA cedido por \u00a9 Instituto Geogr\u00e1fico Nacional de Espa\u00f1a"
+  },
+  "dem": {
+    "file": "plaza-mayor-dem-512.f32",
+    "px": 512,
+    "res_m": 2.0,
+    "dtype": "float32-le",
+    "min": 616.1900024414062,
+    "max": 663.2197265625,
+    "mean": 647.0421142578125,
+    "source": "MDT02 2a cobertura 2016, sheets 0559-1 + 0559-3",
+    "licence": "CC-BY 4.0",
+    "attribution": "\u00a9 Instituto Geogr\u00e1fico Nacional de Espa\u00f1a"
+  },
+  "fetched_at": "2026-11-21",
+  "built_at": "2026-11-21",
+  "outside_requests_needed": 0
+}

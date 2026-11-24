@@ -1,0 +1,13 @@
+{
+  "source": "https://tiles-eu1.arcgis.com/UrtTdLP2PYSxwtI6/arcgis/rest/services/ORTOFOTO_2024_03_20_tif/MapServer",
+  "level": 20,
+  "tileColumn": 513486,
+  "tileRow": 395382,
+  "originPixel": [
+    874.2358306199312,
+    597.4565978497267
+  ],
+  "width": 1792,
+  "height": 1280,
+  "groundMetresPerPixel": 0.11366468954856612
+}

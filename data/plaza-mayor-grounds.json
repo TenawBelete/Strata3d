@@ -1,0 +1,77 @@
+{
+  "square": {
+    "epsg": 25830,
+    "x0": 439562.94,
+    "y0": 4473648.58,
+    "x1": 440472.94,
+    "y1": 4474558.58,
+    "size_m": 910.0
+  },
+  "px": 2048,
+  "res_m": 0.4443,
+  "base_from": 2023,
+  "base_label": "PNOA M\u00e1xima Actualidad 07/2023, 25 cm, saved copy",
+  "source": "https://www.ign.es/wms/pnoa-historico",
+  "licence": "CC-BY 4.0",
+  "attribution": "PNOA cedido por \u00a9 Instituto Geogr\u00e1fico Nacional de Espa\u00f1a",
+  "fetched_at": "2026-11-21",
+  "no_coverage_here": [
+    "Interministerial_1973-1986",
+    "Nacional_1981-1986",
+    "PNOA2004",
+    "PNOA2019",
+    "PNOA2021",
+    "PNOA2024"
+  ],
+  "eras": [
+    {
+      "layer": "AMS_1956-1957",
+      "from": 1956,
+      "label": "Vuelo Americano serie B, 1956\u201357 (US Army Map Service)",
+      "file": "ground-AMS_1956-1957.jpg",
+      "kb": 577
+    },
+    {
+      "layer": "SIGPAC",
+      "from": 1997,
+      "label": "SIGPAC, 1997\u20132003",
+      "file": "ground-SIGPAC.jpg",
+      "kb": 677
+    },
+    {
+      "layer": "PNOA2006",
+      "from": 2006,
+      "label": "PNOA 2006",
+      "file": "ground-PNOA2006.jpg",
+      "kb": 963
+    },
+    {
+      "layer": "PNOA2009",
+      "from": 2009,
+      "label": "PNOA 2009",
+      "file": "ground-PNOA2009.jpg",
+      "kb": 1040
+    },
+    {
+      "layer": "PNOA2011",
+      "from": 2011,
+      "label": "PNOA 2011",
+      "file": "ground-PNOA2011.jpg",
+      "kb": 1112
+    },
+    {
+      "layer": "PNOA2014",
+      "from": 2014,
+      "label": "PNOA 2014",
+      "file": "ground-PNOA2014.jpg",
+      "kb": 953
+    },
+    {
+      "layer": "PNOA2017",
+      "from": 2017,
+      "label": "PNOA 2017",
+      "file": "ground-PNOA2017.jpg",
+      "kb": 891
+    }
+  ]
+}

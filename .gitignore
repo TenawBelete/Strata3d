@@ -1,0 +1,24 @@
+# backups and earlier versions
+*.before-*.html
+*.v1.*
+*.v2.*
+*.tm-v1.html
+*.v-final-*.html
+strata.*.html
+# raw source rasters used only to bake the data packs (about 1.8 GB)
+data/*.tif
+data/*.kmz
+.DS_Store
+
+# Local capture inputs, GPU workspaces and presentation output
+captures/.build-*/
+__pycache__/
+output/
+_site/
+.env
+.env.*
+*.mov
+*.mp4
+captures/plaza-pilot*/
+
+.tools/

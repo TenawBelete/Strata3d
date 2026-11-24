@@ -1,0 +1,58 @@
+{
+  "source": "Ayuntamiento de Madrid, PLAZA_MAYOR_NP",
+  "scene": "https://www.arcgis.com/home/item.html?id=ba4c9cd1a93d40eb868793f97ef3e403",
+  "services": "https://tiles-eu1.arcgis.com/UrtTdLP2PYSxwtI6/arcgis/rest/services/",
+  "files": {
+    "plaza-mayor-survey.bin": "FACHADA_PLAZA_MAYOR_SOLO_5mm/SceneServer/layers/0, RGB",
+    "plaza-mayor-arcade.bin": "SOPORTALES_SOLO/SceneServer/layers/0, laser intensity reduced to 8-bit greyscale"
+  },
+  "sample": "Geometry and measured colour or intensity from nodes listed on index page 0, with at least 80 vertices. Spatial subset within 130 m east and north of the origin and heights between 620 and 720 m.",
+  "encoding": "9 bytes per point: three signed little-endian int16 coordinates in centimetres (east, up, south), followed by three uint8 sRGB channels.",
+  "origin": {
+    "latitude": 40.4155,
+    "longitude": -3.7074,
+    "survey_height_m": 640
+  },
+  "metres_per_degree": {
+    "longitude": 84880,
+    "latitude": 111042
+  },
+  "north_arcade_detail": {
+    "node_depth": 6,
+    "selection": "east -8..24 m, north 26..44 m, orthometric elevation 648..665 m",
+    "thinning": "First measured return per 4 cm voxel per layer",
+    "files": [
+      "plaza-facade-detail.bin",
+      "plaza-arcade-detail.bin"
+    ]
+  },
+  "surface_and_navigation": "tools/bake_plaza_walk.py",
+  "north_facade_photograph": {
+    "author": "Björn S.",
+    "date": "2016-03-11",
+    "source": "https://commons.wikimedia.org/wiki/File:Panoramic_view_of_the_Plaza_Mayor_de_Madrid_-_panoramio.jpg",
+    "license": "CC BY-SA 3.0",
+    "changes": "Reduced to 8192 pixels wide. Approximate angular fit with manually identified façade landmarks. Limited projection on north side; separate capture dates."
+  },
+  "roof_polygons": {
+    "source": "https://services-eu1.arcgis.com/UrtTdLP2PYSxwtI6/arcgis/rest/services/CUBIERTAS_PM/FeatureServer/0",
+    "count": 290,
+    "file": "plaza-roof-survey.json",
+    "processing": "XYZ rings transformed into the local survey frame; triangulated in the browser."
+  },
+  "second_photo": {
+    "author": "Nemo",
+    "date": "2020-02-27",
+    "source": "https://commons.wikimedia.org/wiki/File:Plaza_Mayor_de_Madrid_(panor%C3%A1mica).jpg",
+    "license": "CC BY-SA 4.0",
+    "changes": "Central façade crop rectified against the 2016 photograph, 112 inlier feature matches. Paving crop rectified with four ground controls and broad illumination matched to the municipal ortho. Fifth control residual about 7 image pixels at 1500 pixel reference width. These fits are approximate."
+  },
+  "panaderia_closeup": {
+    "files": [
+      "panaderia-arcade-surface.bin",
+      "panaderia-arcade-indices.bin"
+    ],
+    "method": "The 5 cm front and rear depth grids are derived from the municipal façade RGB and arcade intensity returns. Small gaps are interpolated. The rear wall and ceiling include inferred continuations across occlusions, with a representative ceiling material. The close-up suppresses lower photographic projection and the earlier fragmented triangles within the reconstructed section.",
+    "script": "tools/bake_panaderia_arcade.py"
+  }
+}

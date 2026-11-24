@@ -1,0 +1,121 @@
+{
+ "v": 2,
+ "place": "Plaza Mayor, Madrid",
+ "epsg": 25830,
+ "centre": {
+  "utm_x": 440017.9444818785,
+  "utm_y": 4474103.581899499,
+  "lat": 40.4153949,
+  "lon": -3.7069974
+ },
+ "box": {
+  "half_m": 352.0,
+  "px": 1408,
+  "res_m": 0.5,
+  "v_flip": "row 0 = north",
+  "reach_m": 12.0,
+  "sd_range_m": 8.0
+ },
+ "files": {
+  "years": "tm-plaza-mayor-years.png",
+  "cover": "tm-plaza-mayor-cover.png",
+  "buildings": "plaza-mayor-madrid.json",
+  "dem": "plaza-mayor-dem-512.f32",
+  "dem_manifest": "plaza-mayor-local.json",
+  "grounds": "plaza-mayor-grounds.json"
+ },
+ "encoding": "years.png: R = year>>8, G = year&255 of the NEAREST footprint within reach_m (0 = none, or undated: never removed), B = height m*6 inside the exact footprint, A = 255. cover.png: signed distance to the nearest footprint edge in metres = (v/255-0.5)*sd_range_m, positive inside the footprint.",
+ "stats": {
+  "buildings": 3135,
+  "dated": 3132,
+  "undated": 3,
+  "oldest": 1640,
+  "newest": 2014,
+  "per_decade": {
+   "1640": 1,
+   "1700": 7,
+   "1750": 14,
+   "1760": 21,
+   "1780": 6,
+   "1800": 46,
+   "1820": 88,
+   "1840": 12,
+   "1850": 219,
+   "1860": 165,
+   "1870": 102,
+   "1880": 396,
+   "1890": 182,
+   "1900": 830,
+   "1910": 224,
+   "1920": 132,
+   "1930": 4,
+   "1940": 193,
+   "1950": 32,
+   "1960": 122,
+   "1970": 99,
+   "1980": 128,
+   "1990": 26,
+   "2000": 32,
+   "2010": 51
+  },
+  "top_years": [
+   [
+    1900,
+    768
+   ],
+   [
+    1880,
+    363
+   ],
+   [
+    1850,
+    211
+   ],
+   [
+    1890,
+    182
+   ],
+   [
+    1910,
+    152
+   ],
+   [
+    1860,
+    126
+   ],
+   [
+    1870,
+    98
+   ],
+   [
+    1820,
+    86
+   ]
+  ],
+  "dated_round_to_10": 2307,
+  "dated_round_to_50": 1057,
+  "note": "The cadastre states a construction year; it is not proof of when a building was built (many old buildings carry rounded values). 768 of the dated buildings read exactly 1900."
+ },
+ "source": {
+  "name": "Direccion General del Catastro, INSPIRE BuildingPart (saved copy 2026-11-21)",
+  "licence": "CC BY 4.0",
+  "attribution": "Direcci\u00f3n General del Catastro"
+ },
+ "registration": {
+  "method": "In the browser: 22,801 vertical rays on a 2 m grid within 150 m of the data centre gave mesh heights; the Catastro footprint mask (and 2 m MDT02 terrain) was moved over them to maximise the correlation between (mesh height - terrain) and \"inside a footprint\".",
+  "rotation_deg": -0.51,
+  "tx_m": -1.5,
+  "ty_m": -3.75,
+  "convention": "grid = R(theta) * (east, north) + (tx, ty), grid in metres from the data centre, ENU in the local frame at (lat, lon) with y up, z south",
+  "correlation": {
+   "unregistered": 0.7124,
+   "registered": 0.9009
+  },
+  "consistency": "fits on the west/east/north/south halves agree: theta -0.4..-0.6, tx -1.5, ty -3.5..-4.0",
+  "sensitivity": "1 m shift lowers the correlation by about 0.02",
+  "geoid_N_m": 50.86,
+  "geoid_note": "ellipsoid height of bare ground = MDT02 height + 50.86 m (measured against the mesh, p25 of mesh-minus-terrain on open ground; spread about +-0.5 m)",
+  "measured": "2026-11-21",
+  "frame_ground_ellipsoid_h_m": 702.61
+ }
+}

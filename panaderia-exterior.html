@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Casa de la Panadería · building exterior</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#151515;color:#f4f1eb;font:15px system-ui}main{max-width:1500px;margin:auto;padding:18px}header,nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}h1{font-size:20px;margin:0}a{color:#dfc698}button{font:inherit;border:1px solid #6a6256;border-radius:5px;background:#262522;color:inherit;padding:7px 12px;cursor:pointer}button[aria-pressed=true]{background:#e1c8a0;color:#171511}nav{margin:14px 0}p{margin:8px 0}#view{position:relative;width:100%;height:clamp(260px,71vh,950px);overflow:hidden;background:#8195ab}canvas{display:block;width:100%;height:100%;touch-action:none}footer{font-size:13px;margin-top:10px;color:#d1c8bb}
+</style>
+<script type="importmap">
+{"imports":{"three":"./vendor/three/build/three.module.js","three/addons/":"./vendor/three/examples/jsm/"}}
+</script>
+</head>
+<body><main>
+<header><h1>Casa de la Panadería</h1><a href="panaderia.html">Frontage walk and photo comparison</a></header>
+<nav aria-label="Exterior viewpoints">
+<button disabled data-view="front">Plaza Mayor</button><button disabled data-view="west">West side</button><button disabled data-view="rear">Rear courtyard</button><button disabled data-view="east">East side</button><button disabled data-view="roof">Roof</button><button disabled data-view="street">Walk Calle Mayor</button>
+</nav>
+<p id="status" role="status">Loading the municipal exterior survey…</p>
+<label id="route-controls" hidden>Position on Calle Mayor <input id="route" type="range" min="-32" max="32" step=".1" value="10"></label>
+<div id="view" tabindex="0" aria-label="3D survey of the Casa de la Panadería and surrounding streets"></div>
+<footer>2024 textured survey © Ayuntamiento de Madrid · <a href="https://www.arcgis.com/home/item.html?id=d8bcbe7422a048a6837dafad300ef2be">Municipal source scene</a></footer>
+</main><script type="module" src="panaderia-exterior.js"></script></body></html>

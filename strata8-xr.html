@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Strata XR: the real city on your table</title>
+<style>
+  :root{--bg:#0b0d10;--panel:rgba(14,17,20,.82);--line:rgba(255,255,255,.13);--fg:#f0eee8;--dim:#a2a29a;--accent:#5dcaa5}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;color:var(--fg);font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;overflow:hidden;
+    background:radial-gradient(ellipse at 50% 38%, #2a3038 0%, #15191e 55%, #0a0c0f 100%)}
+  canvas{position:absolute;inset:0;display:block}
+  .glass{background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:14px}
+  .hide{display:none!important}
+  button{background:rgba(255,255,255,.08);border:1px solid var(--line);color:var(--fg);border-radius:9px;padding:8px 12px;font:inherit;cursor:pointer}
+  button:hover{border-color:var(--accent)}
+  button.go{background:var(--accent);color:#06251c;border-color:var(--accent);font-weight:600}
+  button.on{border-color:var(--accent);color:var(--accent)}
+  input[type=range]{width:100%;accent-color:var(--accent)}
+  #xrov{position:fixed;inset:0;pointer-events:none;z-index:5}
+  #xrov > *{pointer-events:auto}
+  #ui{position:absolute;left:14px;bottom:34px;width:min(340px,calc(100% - 28px));padding:13px 15px}
+  #ui .t{display:flex;justify-content:space-between;align-items:baseline;font-weight:600;font-size:15px}
+  #ui .t span{font-weight:400;font-size:12px;color:var(--dim)}
+  #ui .sub{font-size:12px;color:var(--dim);margin-bottom:8px}
+  #ui .row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:8px 0}
+  #ui .yr{display:flex;align-items:baseline;gap:10px;margin-top:6px}
+  #ui .yr b{font:500 30px/1 "Iowan Old Style",Georgia,serif;color:#fff4dc}
+  #ui .yr span{font-size:12.5px;color:var(--dim)}
+  #ui .note{font-size:12px;color:var(--dim);line-height:1.4}
+  #ui details{font-size:12px;color:var(--dim);margin-top:6px}
+  #ui details summary{cursor:pointer;color:var(--fg)}
+  #ui details ol{padding-left:18px;margin:6px 0}
+  #ui code{background:rgba(255,255,255,.08);padding:1px 4px;border-radius:4px;font-size:11.5px}
+  #ui .lab{font-size:12.5px;color:var(--dim);min-width:34px}
+  #scales button{padding:5px 9px;font-size:12.5px}
+  #status{position:absolute;right:14px;bottom:30px;padding:5px 10px;font-size:12.5px;color:var(--dim)}
+  #credits{position:absolute;left:0;right:0;bottom:0;padding:4px 12px;font-size:11px;color:#d6d4cc;background:linear-gradient(transparent,rgba(0,0,0,.55));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #tok{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(480px,calc(100% - 28px));padding:20px 22px;z-index:9}
+  #tok h2{margin:0 0 6px;font-size:19px}
+  #tok .row{display:flex;gap:8px;margin-top:12px}
+  #tok input{flex:1;background:rgba(0,0,0,.4);border:1px solid var(--line);color:var(--fg);border-radius:9px;padding:10px 12px;font:inherit}
+  #tok p{color:var(--dim);margin:6px 0}
+  #tok a{color:var(--accent)}
+  body.xr #ui details, body.xr #scales{display:none}
+  canvas{z-index:1}
+  #camv{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;display:none;background:#000}
+  body.cam{background:#000} body.cam #camv{display:block}
+  #ui .t{cursor:default}
+  body.phone #ui{left:8px;right:8px;width:auto;bottom:20px;padding:10px 12px;max-height:48vh;overflow-y:auto;overscroll-behavior:contain}
+  body.phone #ui .t{cursor:pointer}
+  body.phone #ui:not(.open) .more{display:none}
+  body.phone #ui .yr b{font-size:26px}
+  body.phone #status{top:10px;bottom:auto;right:10px}
+  body.phone button{padding:9px 13px}
+  #moreb{display:none;padding:1px 9px;font-size:14px;margin-left:6px}
+  #w-refl{display:none}   /* mirror reflections are off on the table model */
+  body.phone #wpanel{top:40px!important;bottom:auto!important;left:8px!important;right:8px!important;width:auto!important;padding:7px 11px!important}
+  body.phone #wpanel .w-row, body.phone #wpanel .w-note{display:none}
+  body.phone #wpanel .w-rd{margin:3px 0 0;font-size:12px}
+  body.phone #moreb{display:inline-block}
+  @media (max-width:700px){ #ui{bottom:30px} #status{bottom:auto;top:14px} }
+</style>
+</head>
+<body>
+<div id="xrov">
+  <div id="ui" class="glass">
+    <div class="t">Plaza Mayor on your table <span><span id="sc">1:1000</span><button id="moreb" aria-label="More">⋯</button></span></div>
+    <div class="sub more">The real photographic 3D of Madrid, as a model you can walk around</div>
+    <div class="row" id="xrbtns"></div>
+    <div class="note more" id="xrnote"></div>
+    <div class="yr"><b id="yv">Today</b><span id="yc"></span></div>
+    <input type="range" id="yr" min="1640" max="2026" step="1" value="2026" aria-label="Year">
+    <div class="row"><button id="storm" class="go">Storm</button><span class="lab">Rain</span><input type="range" id="srain" min="0" max="300" step="10" value="0" style="flex:1" aria-label="Rain"><span class="lab" id="rv">off</span></div>
+    <div class="row hide" id="camrow"><button id="cam">Camera</button><span class="note" id="camnote"></span></div>
+    <div class="row more" id="scales"><span class="lab">Size</span><button data-s="2000">1:2000</button><button data-s="1000">1:1000</button><button data-s="500">1:500</button></div>
+    <details class="more" id="howto"><summary>Open it on a Quest or a phone</summary>
+      <ol>
+        <li>Phone and Mac on the same Wi-Fi. On the Mac: <code>cd ~/strata &amp;&amp; python3 -m http.server 8000 --bind 0.0.0.0</code> (allow Python if macOS asks about incoming connections). Your Mac's address: <code>ipconfig getifaddr en0</code></li>
+        <li>On the phone, Chrome: open <code>http://MAC-ADDRESS:8000/strata8-xr.html</code>. The model, years and storm work straight away.</li>
+        <li>Camera, tilt and AR/VR need a secure address: in the phone's Chrome open <code>chrome://flags</code>, search "insecure origins", enable it, type <code>http://MAC-ADDRESS:8000</code>, Relaunch. (Or with a USB cable: <code>adb reverse tcp:8000 tcp:8000</code> and open <code>http://localhost:8000/strata8-xr.html</code>.)</li>
+        <li>Real AR (the model sticks to your table) needs a phone on Google's ARCore list or a Meta Quest. Other phones get the camera backdrop: the model over the live camera, turned with your finger and the phone's tilt.</li>
+        <li>Paste your Cesium ion token once on the device (it stays on that device).</li>
+        <li>Quest: <b>grip</b> moves the city, <b>right stick</b> years, <b>left stick</b> size, <b>A</b> storm, <b>B</b> today, <b>trigger</b> puts it on a surface in AR. Phone: tap a surface to place it.</li>
+      </ol>
+    </details>
+  </div>
+  <div id="status">starting…</div>
+  <div id="credits"></div>
+</div>
+<video id="camv" playsinline muted></video>
+<div id="tok" class="glass hide">
+  <h2>One step: your Cesium ion token</h2>
+  <p>The same token as in Strata 8. It is stored only in this browser and sent only to Cesium.</p>
+  <p>No token yet? Open <a href="strata8.html">strata8.html</a> for the 2-minute instructions.</p>
+  <div class="row"><input id="tokin" type="password" placeholder="paste the token" autocomplete="off"><button id="toksave" class="go">Start</button></div>
+</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+  "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+  "3d-tiles-renderer": "https://esm.sh/3d-tiles-renderer@0.5.4?external=three",
+  "3d-tiles-renderer/plugins": "https://esm.sh/3d-tiles-renderer@0.5.4/plugins?external=three"
+}}
+</script>
+<script type="module">
+/* ==================================================================== strata8-xr.html
+   The real city on a table: Google's photographic 3D of Plaza Mayor, cut to a 660 m disc, standing on a plinth
+   at 1:1000. Mac: orbit it with the mouse. Meta Quest / Android Chrome: View in AR (on your real table, passthrough
+   or camera) or View in VR. Year slider dissolves buildings newer than the year; Storm runs strata8-water.js on the
+   model (the same simulation as the big page, buildings of the chosen year are walls).
+   Tiles group = inverse of the local frame (east, up, south at the data centre), so the city is in plain metres around
+   the origin; the city group scales it to the table. No planet-scale numbers reach the GPU, so XR eyes are exact. */
+import * as THREE from 'three';
+import { TilesRenderer } from '3d-tiles-renderer';
+import { CesiumIonAuthPlugin, TileCompressionPlugin, GLTFExtensionsPlugin } from '3d-tiles-renderer/plugins';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const $ = id => document.getElementById(id);
+const say = t => { $('status').textContent = t; };
+window.__errs = window.__errs || [];
+{ const oe = console.error.bind(console);
+  console.error = (...a) => { try { window.__errs.push('console.error: ' + a.map(x => x && x.stack ? x.stack : String(x)).join(' ').slice(0, 700)); } catch (e) {} oe(...a); };
+  addEventListener('error', e => window.__errs.push('error: ' + e.message));
+  addEventListener('unhandledrejection', e => window.__errs.push('rejection: ' + (e.reason && e.reason.message || e.reason))); }
+
+const Q = new URLSearchParams(location.search);
+/* phones: touch first, lighter drawing (the Moto G06 Power class: Mali-G52 MC2, 720 px wide screen, 4 GB) */
+const PHONE = Q.has('phone') || (matchMedia('(pointer: coarse)').matches && Math.min(screen.width, screen.height) < 820);
+if (PHONE) document.body.classList.add('phone');
+const R = 330;                 /* radius of the model, metres */
+const PH = 24;                 /* plinth height, metres (2.4 cm at 1:1000) */
+let scale = PHONE ? 2000 : 1000;   /* 1:scale */
+let year = 2026;               /* 2026 = today */
+
+/* ------------------------------------------------------------------ renderer, scene */
+const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio, PHONE ? 1.25 : 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.setClearColor(0x000000, 0);
+renderer.xr.enabled = true;
+document.body.prepend(renderer.domElement);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(PHONE ? 55 : 45, innerWidth/innerHeight, 0.01, 12);   /* 12 m = 12 km of real city at 1:1000: far tiles are never fetched */
+if (PHONE) camera.position.set(0, 0.42, 0.52); else camera.position.set(0, 0.52, 0.78);
+scene.add(camera);
+scene.add(new THREE.HemisphereLight(0xe6edf3, 0x1a1d21, 1.7));
+const sun = new THREE.DirectionalLight(0xffffff, 1.5); sun.position.set(0.6, 1.4, 0.9); scene.add(sun);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+if (PHONE) controls.target.set(0, -0.045, 0); else controls.target.set(0, 0.04, 0); controls.enableDamping = true; controls.minDistance = 0.12; controls.maxDistance = 4;
+controls.maxPolarAngle = Math.PI*0.49; controls.update();
+
+const table = new THREE.Group(); scene.add(table);          /* sits on the real table (origin = plinth bottom centre) */
+const city = new THREE.Group(); table.add(city);            /* plain metres: x east, y up, z south */
+
+/* ------------------------------------------------------------------ the local frame (from the data pack) */
+let man;
+try { man = await fetch('data/tm-plaza-mayor.json').then(r => { if (!r.ok) throw new Error('data pack ' + r.status); return r.json(); }); }
+catch (e){ say('Missing data/tm-plaza-mayor.json (' + e.message + ')'); throw e; }
+const cen = man.centre, reg = man.registration;
+function ecef(latD, lonD, h){
+  const a = 6378137.0, f = 1/298.257223563, e2 = f*(2 - f), la = latD*Math.PI/180, lo = lonD*Math.PI/180, sl = Math.sin(la), cl = Math.cos(la);
+  const Nn = a/Math.sqrt(1 - e2*sl*sl);
+  return new THREE.Vector3((Nn + h)*cl*Math.cos(lo), (Nn + h)*cl*Math.sin(lo), (Nn*(1 - e2) + h)*sl);
+}
+const ENU = new THREE.Matrix4();
+{ const la = cen.lat*Math.PI/180, lo = cen.lon*Math.PI/180;
+  const E = new THREE.Vector3(-Math.sin(lo), Math.cos(lo), 0);
+  const Nv = new THREE.Vector3(-Math.sin(la)*Math.cos(lo), -Math.sin(la)*Math.sin(lo), Math.cos(la));
+  const Uv = new THREE.Vector3(Math.cos(la)*Math.cos(lo), Math.cos(la)*Math.sin(lo), Math.sin(la));
+  ENU.makeBasis(E, Uv, Nv.negate()); ENU.setPosition(ecef(cen.lat, cen.lon, reg.frame_ground_ellipsoid_h_m)); }
+const ENUinv = ENU.clone().invert();
+const th = reg.rotation_deg*Math.PI/180, RC = Math.cos(th), RS = Math.sin(th);
+
+/* ------------------------------------------------------------------ cut the real mesh to the disc, dissolve by year */
+const blankF = new THREE.DataTexture(new Float32Array([-1, 0, 0, 0]), 1, 1, THREE.RGBAFormat, THREE.FloatType); blankF.needsUpdate = true;
+const CU = {
+  uToLocal:{value:new THREE.Matrix4()}, uDiscR:{value:R}, uYearX:{value:9999}, tYearX:{value:blankF}, uHalfX:{value:352},
+  uGxX:{value:new THREE.Vector3(RC, RS, reg.tx_m)}, uGyX:{value:new THREE.Vector3(RS, -RC, reg.ty_m)}
+};
+function patchMat(m){
+  if (!m || m.userData.xrP || !(m.isMeshBasicMaterial || m.isMeshStandardMaterial || m.isMeshLambertMaterial)) return;
+  m.userData.xrP = 1; const prev = m.onBeforeCompile;
+  m.onBeforeCompile = function(sh, rd){
+    if (prev) prev.call(this, sh, rd);
+    for (const k in CU) sh.uniforms[k] = CU[k];
+    sh.vertexShader = sh.vertexShader
+      .replace('#include <common>', '#include <common>\nuniform mat4 uToLocal; varying vec3 vCityL;')
+      .replace('#include <project_vertex>', '#include <project_vertex>\nvCityL = (uToLocal*(modelMatrix*vec4(transformed, 1.0))).xyz;');
+    sh.fragmentShader = sh.fragmentShader
+      .replace('#include <common>', '#include <common>\nvarying vec3 vCityL; uniform float uDiscR, uYearX, uHalfX; uniform sampler2D tYearX; uniform vec3 uGxX, uGyX;')
+      .replace('#include <clipping_planes_fragment>', `#include <clipping_planes_fragment>
+        if (dot(vCityL.xz, vCityL.xz) > uDiscR*uDiscR) discard;
+        { vec2 g = vec2(dot(uGxX.xy, vCityL.xz) + uGxX.z, dot(uGyX.xy, vCityL.xz) + uGyX.z);
+          vec2 uvy = vec2(g.x + uHalfX, uHalfX - g.y)/(2.0*uHalfX);
+          vec4 yt = texture2D(tYearX, clamp(uvy, 0.001, 0.999));
+          if (yt.r > uYearX && vCityL.y - yt.g > 0.7) discard; }`);
+  };
+  /* one program per patch combination: the water module adds a WET_ON define on top, which is part of three's key */
+  m.customProgramCacheKey = () => 'strata-xr-disc-1';
+  m.needsUpdate = true;
+}
+function patchScene(root){ root.traverse(o => { if (o.isMesh && o.material){ if (Array.isArray(o.material)) o.material.forEach(patchMat); else patchMat(o.material); } }); }
+
+/* ------------------------------------------------------------------ tiles */
+let tiles = null, W = null, S = null, built = false;
+function startTiles(token){
+  tiles = new TilesRenderer();
+  tiles.registerPlugin(new CesiumIonAuthPlugin({apiToken:token, assetId:'2275207', autoRefreshToken:true}));
+  tiles.registerPlugin(new TileCompressionPlugin());
+  const draco = new DRACOLoader(); draco.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/libs/draco/gltf/');
+  tiles.registerPlugin(new GLTFExtensionsPlugin({dracoLoader:draco}));
+  /* detail: the Cesium ion / Google plugin applies Google's recommended errorTarget (20) when the tileset loads; kept as is */
+  if (tiles.lruCache){ tiles.lruCache.minBytesSize = (PHONE ? 70 : 160)*1024*1024; tiles.lruCache.maxBytesSize = (PHONE ? 100 : 230)*1024*1024; }
+  tiles.group.matrixAutoUpdate = false; tiles.group.matrix.copy(ENUinv);
+  city.add(tiles.group);
+  tiles.setCamera(camera); tiles.setResolutionFromRenderer(camera, renderer);
+  tiles.addEventListener('load-model', e => { if (e && e.scene) patchScene(e.scene); say('real 3D · streaming'); });
+  tiles.addEventListener('tile-visibility-change', e => { if (e && e.visible && e.scene) patchScene(e.scene); });
+  let firstErr = true;
+  tiles.addEventListener('load-error', e => {
+    if (!firstErr) return; firstErr = false;
+    const m = String((e && e.error && e.error.message) || (e && e.message) || 'tile error');
+    if (/401|403|token|unauth/i.test(m)){ say('The token was rejected'); $('tok').classList.remove('hide'); } else say('Some tiles failed (' + m.slice(0, 60) + ')');
+  });
+  say('streaming the real city…');
+  S = {THREE, renderer, scene, camera, tiles, TM:null, walk:null, driveWater:true, waterYear:() => (year >= 2026 ? 65534 : year)};   /* 65534 = today, as on the main page */
+  window.__strata8xr.S = S;
+  import('./strata8-water.js?v=' + Date.now())
+    .then(m => m.load(S, {reflections:false, worldMode:true, fine:0.15}))
+    .then(w => { W = w; buildFromWater(); })
+    .catch(e => { console.error(e); say('Water and ground: ' + (e && e.message || e)); });
+}
+
+/* ------------------------------------------------------------------ the model's base, built from the 2 m terrain */
+let plinthTop = -26, yearTex = null, labelTopL = 240;
+const rimMat = new THREE.MeshBasicMaterial({color:0x5dcaa5});
+function buildFromWater(){
+  const T = W.terrAt, N = W.N;
+  /* building years per 2 m cell, grown by one cell so facades on the footprint edge go with their building */
+  const cy = W.cellYear, b = W.bData, d = new Float32Array(N*N*4);
+  for (let j = 0; j < N; j++) for (let i = 0; i < N; i++){
+    const k = j*N + i; let v = cy[k];
+    if (v === 65535){ let mn = 1e9;
+      for (let dj = -1; dj <= 1; dj++) for (let di = -1; di <= 1; di++){ const jj = j + dj, ii = i + di; if (jj < 0 || ii < 0 || jj >= N || ii >= N) continue; const q = cy[jj*N + ii]; if (q !== 65535 && q < mn) mn = q; }
+      v = mn < 1e9 ? mn : -1; }
+    d[k*4] = v; d[k*4 + 1] = b[k*4];
+  }
+  yearTex = new THREE.DataTexture(d, N, N, THREE.RGBAFormat, THREE.FloatType);
+  yearTex.minFilter = yearTex.magFilter = THREE.NearestFilter; yearTex.generateMipmaps = false; yearTex.needsUpdate = true;
+  CU.tYearX.value = yearTex; CU.uHalfX.value = N*W.L/2;
+
+  const tAt = (x, z) => { const v = T(x, z); return v === null ? 0 : v; };
+  let mn = 1e9, mx = -1e9;
+  for (let x = -R; x <= R; x += 8) for (let z = -R; z <= R; z += 8){ if (x*x + z*z > R*R) continue; const v = tAt(x, z); mn = Math.min(mn, v); mx = Math.max(mx, v); }
+  plinthTop = mn - 5;
+  /* ground sheet: the bare terrain 0.45 m under the photo mesh; seen only where a building has been dissolved or the mesh has a hole */
+  { const st = 4, n = Math.ceil((2*R + 8)/st) + 1, pos = new Float32Array(n*n*3), idx = [];
+    for (let j = 0; j < n; j++) for (let i = 0; i < n; i++){ const x = -R - 4 + i*st, z = -R - 4 + j*st, k = (j*n + i)*3; pos[k] = x; pos[k + 1] = tAt(x, z) - 0.45; pos[k + 2] = z; }
+    for (let j = 0; j < n - 1; j++) for (let i = 0; i < n - 1; i++){ const x = -R - 4 + (i + 0.5)*st, z = -R - 4 + (j + 0.5)*st; if (x*x + z*z > (R + 8)*(R + 8)) continue;
+      const a = j*n + i, b2 = a + 1, c = a + n, e = c + 1; idx.push(a, c, b2, b2, c, e); }
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setIndex(idx);
+    const m = new THREE.ShaderMaterial({uniforms:{uR:{value:R}},
+      vertexShader:'varying vec3 vL; void main(){ vL = position; gl_Position = projectionMatrix*modelViewMatrix*vec4(position, 1.0); }',
+      fragmentShader:`uniform float uR; varying vec3 vL;
+        void main(){ if (dot(vL.xz, vL.xz) > uR*uR) discard;
+          float h = abs(fract((vL.x + vL.z)/6.0) - 0.5);
+          vec3 c = mix(vec3(0.66, 0.61, 0.53), vec3(0.52, 0.47, 0.40), smoothstep(0.16, 0.10, h));
+          gl_FragColor = vec4(c, 1.0); }`});
+    const sheet = new THREE.Mesh(g, m); sheet.name = 'ground'; city.add(sheet); }
+  /* the cut edge: earth from the terrain line down to the plinth (plain: there is no underground data here) */
+  { const sg = 256, pos = new Float32Array((sg + 1)*6), col = new Float32Array((sg + 1)*6), idx = [];
+    const top = new THREE.Color().setRGB(0.33, 0.27, 0.21, THREE.SRGBColorSpace), bot = new THREE.Color().setRGB(0.06, 0.055, 0.05, THREE.SRGBColorSpace);
+    for (let s = 0; s <= sg; s++){ const a = s/sg*Math.PI*2, x = Math.cos(a)*R, z = Math.sin(a)*R;
+      pos.set([x, tAt(x, z) - 0.45, z, x, plinthTop, z], s*6); col.set([top.r, top.g, top.b, bot.r, bot.g, bot.b], s*6);
+      if (s < sg){ const p = s*2; idx.push(p, p + 2, p + 1, p + 1, p + 2, p + 3); } }
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('color', new THREE.BufferAttribute(col, 3)); g.setIndex(idx);
+    city.add(new THREE.Mesh(g, new THREE.MeshBasicMaterial({vertexColors:true, side:THREE.DoubleSide}))); }
+  /* plinth, rim, soft contact shadow */
+  { const p = new THREE.Mesh(new THREE.CylinderGeometry(R + 4, R + 7, PH, 160), new THREE.MeshStandardMaterial({color:0x1c2026, roughness:0.5, metalness:0.15}));
+    p.position.y = plinthTop - PH/2; city.add(p);
+    const rim = new THREE.Mesh(new THREE.TorusGeometry(R + 4, 0.9, 6, 220), rimMat); rim.rotation.x = Math.PI/2; rim.position.y = plinthTop; city.add(rim);
+    const cv = document.createElement('canvas'); cv.width = cv.height = 128; const cx = cv.getContext('2d');
+    const gr = cx.createRadialGradient(64, 64, 20, 64, 64, 64); gr.addColorStop(0, 'rgba(0,0,0,0.55)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); cx.fillStyle = gr; cx.fillRect(0, 0, 128, 128);
+    const sh = new THREE.Mesh(new THREE.PlaneGeometry(2*(R + 70), 2*(R + 70)), new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(cv), transparent:true, depthWrite:false}));
+    sh.rotation.x = -Math.PI/2; sh.position.y = plinthTop - PH + 0.3; city.add(sh); }
+  labelTopL = mx + 230;
+  built = true;
+  setScale(scale); setYear(year); drawLabel();
+  say('real 3D · ' + W.walls().buildings.toLocaleString('en') + ' buildings');
+}
+
+/* ------------------------------------------------------------------ a little storm over the model */
+const rain = (() => {
+  const n = 2600, seed = new Float32Array(n*2*3), endp = new Float32Array(n*2);
+  for (let i = 0; i < n; i++){ const a = Math.random(), r = Math.random(), p = Math.random();
+    seed.set([a, r, p, a, r, p], i*6); endp[i*2] = 0; endp[i*2 + 1] = 1; }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n*2*3), 3));
+  g.setAttribute('seed', new THREE.BufferAttribute(seed, 3)); g.setAttribute('endp', new THREE.BufferAttribute(endp, 1));
+  const m = new THREE.ShaderMaterial({transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
+    uniforms:{uT:{value:0}, uR:{value:R*0.9}, uTop:{value:200}, uBot:{value:-20}, uOn:{value:0}},
+    vertexShader:`attribute vec3 seed; attribute float endp; uniform float uT, uR, uTop, uBot, uOn; varying float vA;
+      void main(){ float a = seed.x*6.2832, r = sqrt(seed.y)*uR;
+        float ph = fract(seed.z - uT*(0.45 + 0.25*fract(seed.z*7.31)));
+        float y = mix(uBot, uTop, ph) + endp*7.0;
+        vA = uOn*(1.0 - endp*0.8)*smoothstep(0.0, 0.06, ph)*smoothstep(1.0, 0.88, ph);
+        gl_Position = projectionMatrix*modelViewMatrix*vec4(cos(a)*r, y, sin(a)*r, 1.0); }`,
+    fragmentShader:'varying float vA; void main(){ gl_FragColor = vec4(0.80, 0.86, 0.95, vA*0.5); }'});
+  const L = new THREE.LineSegments(g, m); L.frustumCulled = false; city.add(L);
+  /* clouds: soft sprites at about 210 m */
+  const cv = document.createElement('canvas'); cv.width = cv.height = 128; const cx = cv.getContext('2d');
+  const gr = cx.createRadialGradient(64, 64, 4, 64, 64, 64); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.5, 'rgba(255,255,255,0.55)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  cx.fillStyle = gr; cx.fillRect(0, 0, 128, 128); const ct = new THREE.CanvasTexture(cv);
+  const clouds = new THREE.Group(); city.add(clouds); const cm = [];
+  for (let i = 0; i < 9; i++){ const mt = new THREE.SpriteMaterial({map:ct, color:0x8a9098, transparent:true, opacity:0, depthWrite:false});
+    const s = new THREE.Sprite(mt); const a = i/9*Math.PI*2 + Math.random(), r = (i === 0 ? 0 : 0.35 + Math.random()*0.35)*R;
+    s.position.set(Math.cos(a)*r, 205 + Math.random()*22, Math.sin(a)*r); const k = 200 + Math.random()*120; s.scale.set(k, k*0.55, 1); s.userData.o = 0.5 + Math.random()*0.3;
+    clouds.add(s); cm.push(mt); }
+  let on = 0;
+  return { L, m, g, clouds, frame(t, dt, mm, active){
+    const want = active ? Math.min(1, 0.35 + mm/160) : 0; on += (want - on)*Math.min(1, dt*1.5);
+    m.uniforms.uT.value = t/1000; m.uniforms.uOn.value = on; g.setDrawRange(0, Math.round(n*2*Math.min(1, mm/140 + 0.15)));
+    L.visible = clouds.visible = on > 0.01; clouds.rotation.y += dt*0.02;
+    cm.forEach(mt => { mt.opacity = on*0.62; }); m.uniforms.uTop.value = 198; m.uniforms.uBot.value = plinthTop + 6; } };
+})();
+
+/* ------------------------------------------------------------------ floating label (shown in AR/VR) */
+const lc = document.createElement('canvas'); lc.width = 1024; lc.height = 300; const lx = lc.getContext('2d');
+const ltex = new THREE.CanvasTexture(lc); ltex.colorSpace = THREE.SRGBColorSpace;
+const label = new THREE.Mesh(new THREE.PlaneGeometry(0.34, 0.1), new THREE.MeshBasicMaterial({map:ltex, transparent:true, depthWrite:false}));
+label.visible = false; table.add(label);
+function standing(Y){ if (!W) return null; let c = 0; const ys = W.years; for (let i = 0; i < ys.length; i++) if (ys[i] <= Y) c++; return c; }
+function drawLabel(){
+  lx.clearRect(0, 0, 1024, 300);
+  lx.fillStyle = 'rgba(14,17,20,0.82)'; lx.beginPath(); lx.roundRect(4, 4, 1016, 292, 34); lx.fill();
+  lx.strokeStyle = 'rgba(255,255,255,0.15)'; lx.lineWidth = 3; lx.stroke();
+  const c = standing(year);
+  lx.fillStyle = '#fff4dc'; lx.font = '500 92px Georgia, serif'; lx.fillText(year >= 2026 ? 'Today' : String(year), 40, 112);
+  lx.fillStyle = '#f0eee8'; lx.font = '600 38px system-ui, sans-serif';
+  lx.fillText(c === null ? 'Plaza Mayor, Madrid' : c.toLocaleString('en') + ' buildings standing', 330, 72);
+  lx.fillStyle = '#a2a29a'; lx.font = '32px system-ui, sans-serif';
+  const mm = parseFloat($('srain').value) || 0;
+  lx.fillText(W && W.on ? 'Storm ' + mm + ' mm/h · water runs downhill' : 'Plaza Mayor, Madrid · real 3D', 330, 120);
+  lx.font = '26px system-ui, sans-serif';
+  if (xrMode === 'vr' && !hasPointer){ lx.fillText('Look down at the model', 40, 200); lx.fillText('Tap the screen or the viewer button: go back in time', 40, 245); }
+  else { lx.fillText(xrMode === 'ar' && !placedOnce ? 'Point at a table and pull the trigger / tap to place' : 'Grip: move · Right stick: years · Left stick: size', 40, 200);
+    lx.fillText('A: storm · B: today · 1:' + Math.round(scale), 40, 245); }
+  ltex.needsUpdate = true;
+}
+
+/* ------------------------------------------------------------------ controls: year, rain, storm, size */
+let labelDirty = 0;
+function setYear(y){
+  year = Math.max(1640, Math.min(2026, Math.round(y)));
+  $('yr').value = year; $('yv').textContent = year >= 2026 ? 'Today' : String(year);
+  const c = standing(year); $('yc').textContent = c === null ? '' : c.toLocaleString('en') + (year >= 2026 ? ' buildings today' : ' buildings standing');
+  CU.uYearX.value = year >= 2026 ? 9999 : year; labelDirty = 1;
+}
+function setScale(s){
+  scale = Math.max(250, Math.min(5000, s));
+  city.scale.setScalar(1/scale); city.position.y = -(plinthTop - PH)/scale;
+  label.position.set(0, (labelTopL - (plinthTop - PH))/scale + 0.06, 0);
+  $('sc').textContent = '1:' + Math.round(scale);
+  document.querySelectorAll('#scales button').forEach(b => b.classList.toggle('on', +b.dataset.s === Math.round(scale)));
+  labelDirty = 1;
+}
+function toggleStorm(){
+  if (!W){ say('the water model is still loading'); return; }
+  W.setOn(!W.on);
+  $('storm').textContent = W.on ? 'Stop storm' : 'Storm'; $('storm').classList.toggle('go', !W.on);
+  rv(); labelDirty = 1;
+}
+function rv(){ const v = parseFloat($('srain').value) || 0; $('rv').textContent = v ? v + ' mm/h' : 'off'; }
+$('yr').addEventListener('input', e => setYear(+e.target.value));
+$('srain').addEventListener('input', () => { rv(); labelDirty = 1; });
+$('storm').addEventListener('click', toggleStorm);
+document.querySelectorAll('#scales button').forEach(b => b.addEventListener('click', () => setScale(+b.dataset.s)));
+addEventListener('keydown', e => {
+  if (e.target && e.target.tagName === 'INPUT' && e.target.type !== 'range') return;
+  if (e.key === '[') setYear(year - 1); else if (e.key === ']') setYear(year + 1);
+  else if (e.key === '{') setYear(year - 10); else if (e.key === '}') setYear(year + 10);
+  else if (e.key === 's' || e.key === 'S') toggleStorm();
+});
+/* phone panel: tap the title (or ⋯) for the extra controls */
+document.querySelector('#ui .t').addEventListener('click', () => { if (PHONE) $('ui').classList.toggle('open'); });
+
+/* camera backdrop for phones without real AR: the live back camera behind the model. The model does NOT stick to the
+   table (no ARCore on such phones); finger turns it, pinch sizes it, tilting the phone changes the viewing height. */
+let camStream = null, tilt = null, dragging = false, arOK = false;
+controls.addEventListener('start', () => { dragging = true; }); controls.addEventListener('end', () => { dragging = false; });
+addEventListener('devicemotion', e => {
+  const g = e.accelerationIncludingGravity; if (!g || g.y === null || g.z === null) return;
+  const pd = Math.atan2(g.z, g.y);                        /* 0 = phone upright, pi/2 = flat, screen up */
+  tilt = tilt === null ? pd : tilt + (pd - tilt)*0.15;
+});
+async function camToggle(){
+  const v = $('camv');
+  if (camStream){ camStream.getTracks().forEach(t => t.stop()); camStream = null; v.srcObject = null; document.body.classList.remove('cam'); $('cam').textContent = 'Camera'; $('camnote').textContent = ''; return; }
+  if (!isSecureContext || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    $('camnote').innerHTML = 'The camera needs one Chrome setting on this phone: open <b>chrome://flags</b>, search <b>insecure origins</b>, enable it, add <b>' + location.origin + '</b>, tap Relaunch.'; return; }
+  try {
+    camStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}, width:{ideal:1280}}, audio:false});
+    v.srcObject = camStream; await v.play(); document.body.classList.add('cam'); $('cam').textContent = 'Camera off';
+    $('camnote').textContent = 'Not true AR: the model cannot stick to your table on this phone. Drag to turn, pinch to size, tilt the phone to look down on it.';
+  } catch (e){ camStream = null; $('camnote').textContent = 'Camera: ' + (e && e.message || e); }
+}
+$('cam').addEventListener('click', camToggle);
+$('moreb').addEventListener('click', e => { e.stopPropagation(); $('ui').classList.toggle('open'); });
+const _sph = new THREE.Spherical(), _off = new THREE.Vector3();
+function tiltFrame(){
+  if (!camStream || tilt === null || dragging) return;
+  _off.copy(camera.position).sub(controls.target); _sph.setFromVector3(_off);
+  const want = Math.max(0.25, Math.min(1.45, Math.PI/2 - Math.max(0, Math.min(Math.PI/2, tilt))*0.95));
+  _sph.phi += (want - _sph.phi)*0.12; _off.setFromSpherical(_sph); camera.position.copy(controls.target).add(_off); camera.lookAt(controls.target);
+}
+
+/* taps on the panel must not count as "place the model" in phone AR */
+$('xrov').addEventListener('beforexrselect', e => { if (e.target && e.target.closest && e.target.closest('#ui')) e.preventDefault(); });
+
+/* ------------------------------------------------------------------ AR / VR */
+let hasPointer = false;
+let xrMode = null, refType = 'local', placedOnce = false, hitSource = null, hitAsked = false, grab = null, firstXRFrame = false;
+const pressed = {};
+const reticle = new THREE.Mesh(new THREE.RingGeometry(0.05, 0.065, 48).rotateX(-Math.PI/2), new THREE.MeshBasicMaterial({color:0x5dcaa5}));
+reticle.matrixAutoUpdate = false; reticle.visible = false; scene.add(reticle);
+const vrRoom = new THREE.Group(); vrRoom.visible = false; scene.add(vrRoom);
+{ const floor = new THREE.Mesh(new THREE.CircleGeometry(8, 64).rotateX(-Math.PI/2), new THREE.MeshBasicMaterial({color:0x14181d})); vrRoom.add(floor);
+  const grid = new THREE.GridHelper(16, 32, 0x2b323a, 0x1f252b); grid.position.y = 0.002; vrRoom.add(grid);
+  const desk = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.76, 64), new THREE.MeshStandardMaterial({color:0x2a2f36, roughness:0.7}));
+  desk.name = 'desk'; vrRoom.add(desk); }
+const rayGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, -0.5)]);
+const ctrls = [0, 1].map(i => {
+  const c = renderer.xr.getController(i); c.visible = false;
+  c.add(new THREE.Line(rayGeo, new THREE.LineBasicMaterial({color:0x5dcaa5, transparent:true, opacity:0.7})));
+  c.addEventListener('connected', e => { c.userData.src = e.data; c.visible = e.data && e.data.targetRayMode === 'tracked-pointer'; });
+  c.addEventListener('disconnected', () => { c.visible = false; c.userData.src = null; });
+  c.addEventListener('select', onSelect);
+  c.addEventListener('squeezestart', () => startGrab(c));
+  c.addEventListener('squeezeend', () => { if (grab && grab.c === c) grab = null; });
+  scene.add(c); return c;
+});
+const _v = new THREE.Vector3(), _f = new THREE.Vector3(), _q = new THREE.Quaternion(), _s = new THREE.Vector3(), _m = new THREE.Matrix4(), Y = new THREE.Vector3(0, 1, 0);
+const posOf = o => new THREE.Vector3().setFromMatrixPosition(o.matrixWorld);
+const yawOf = o => { _f.set(0, 0, -1).transformDirection(o.matrixWorld); return Math.atan2(-_f.x, -_f.z); };
+function faceViewer(p){ const c = posOf(renderer.xr.getCamera()); table.rotation.set(0, Math.atan2(c.x - p.x, c.z - p.z), 0); }
+function placeAt(p){ table.position.copy(p); faceViewer(p); table.visible = true; placedOnce = true; labelDirty = 1; }
+function placeInFront(){
+  const cam = renderer.xr.getCamera(), p = posOf(cam); _f.set(0, 0, -1).transformDirection(cam.matrixWorld); _f.y = 0;
+  if (_f.lengthSq() < 1e-6) _f.set(0, 0, -1); _f.normalize();
+  const q = p.clone().addScaledVector(_f, 0.75); q.y = refType === 'local-floor' ? 0.76 : p.y - 0.5;
+  placeAt(q);
+  const desk = vrRoom.getObjectByName('desk'); desk.position.set(q.x, q.y - 0.38, q.z);
+}
+const YEAR_STEPS = [2026, 1950, 1900, 1850];
+function onSelect(e){
+  const src = e && e.data;
+  if (xrMode === 'ar'){ if (reticle.visible){ _m.copy(reticle.matrix); _m.decompose(_v, _q, _s); placeAt(_v.clone()); } else if (!placedOnce) placeInFront(); }
+  else if (xrMode === 'vr'){
+    if (src && src.targetRayMode === 'tracked-pointer') toggleStorm();
+    else { const i = YEAR_STEPS.findIndex(y => y < year); setYear(yearF = i < 0 ? 2026 : YEAR_STEPS[i]); }   /* Cardboard: tap = back in time, then today again */
+  }
+}
+function startGrab(c){ grab = {c, p0:posOf(c), y0:yawOf(c), t0:table.position.clone(), ty0:table.rotation.y}; }
+
+async function enterXR(mode){
+  const cur = renderer.xr.getSession(); if (cur){ cur.end(); return; }
+  const init = mode === 'ar'
+    ? {requiredFeatures:['hit-test'], optionalFeatures:['dom-overlay', 'local-floor'], domOverlay:{root:$('xrov')}}
+    : {optionalFeatures:['local-floor', 'bounded-floor', 'hand-tracking', 'layers']};
+  let session = null;
+  try { session = await navigator.xr.requestSession('immersive-' + mode, init); }
+  catch (e){
+    if (mode === 'ar'){ try { session = await navigator.xr.requestSession('immersive-ar', {optionalFeatures:['hit-test', 'dom-overlay', 'local-floor'], domOverlay:{root:$('xrov')}}); } catch (e2){ say('AR could not start: ' + e2.message); return; } }
+    else { say('VR could not start: ' + e.message); return; }
+  }
+  refType = 'local';
+  try { await session.requestReferenceSpace('local-floor'); refType = 'local-floor'; } catch (e){}
+  xrMode = mode; renderer.xr.setReferenceSpaceType(refType);
+  try { await renderer.xr.setSession(session); } catch (e){ say('XR could not start: ' + e.message); xrMode = null; try { session.end(); } catch (e2){} }
+}
+renderer.xr.addEventListener('sessionstart', () => {
+  const session = renderer.xr.getSession();
+  document.body.classList.add('xr'); placedOnce = false; firstXRFrame = true; grab = null; hitSource = null; hitAsked = false;
+  table.position.set(0, 0, 0); table.rotation.set(0, 0, 0);
+  table.visible = xrMode !== 'ar';
+  vrRoom.visible = xrMode === 'vr'; scene.background = xrMode === 'vr' ? new THREE.Color(0x0d1014) : null;
+  label.visible = true; labelDirty = 1;
+  if (tiles){ tiles.deleteCamera(camera); tiles.setCamera(renderer.xr.getCamera()); }
+  if (xrMode === 'ar'){
+    hitAsked = true;
+    session.requestReferenceSpace('viewer').then(vs => session.requestHitTestSource({space:vs})).then(src => { hitSource = src; }).catch(() => { hitSource = null; });
+    setTimeout(() => { if (xrMode === 'ar' && !hitSource && !placedOnce) placeInFront(); }, 2500);   /* no surface finding: put it in front */
+  }
+  session.addEventListener('end', () => { if (hitSource){ try { hitSource.cancel(); } catch (e){} } hitSource = null; });
+  updateXRButtons();
+});
+renderer.xr.addEventListener('sessionend', () => {
+  document.body.classList.remove('xr');
+  if (tiles){ tiles.deleteCamera(renderer.xr.getCamera()); tiles.setCamera(camera); tiles.setResolutionFromRenderer(camera, renderer); }
+  xrMode = null; reticle.visible = false; vrRoom.visible = false; scene.background = null; label.visible = false;
+  table.position.set(0, 0, 0); table.rotation.set(0, 0, 0); table.visible = true; grab = null;
+  updateXRButtons();
+});
+const xrBtn = {};
+function updateXRButtons(){
+  const s = renderer.xr.isPresenting;
+  if (xrBtn.ar) xrBtn.ar.textContent = s && xrMode === 'ar' ? 'Exit AR' : 'View in AR';
+  if (xrBtn.vr) xrBtn.vr.textContent = s && xrMode === 'vr' ? 'Exit VR' : (PHONE ? 'VR (Cardboard viewer)' : 'View in VR');
+  if (xrBtn.vr) xrBtn.vr.classList.toggle('hide', s && xrMode === 'ar');
+}
+async function setupXRButtons(){
+  let ar = false, vr = false;
+  if (navigator.xr){ try { ar = await navigator.xr.isSessionSupported('immersive-ar'); } catch (e){} try { vr = await navigator.xr.isSessionSupported('immersive-vr'); } catch (e){} }
+  for (const [k, ok] of [['ar', ar], ['vr', vr]]){ if (!ok) continue; const b = document.createElement('button'); b.className = 'go'; b.addEventListener('click', () => enterXR(k)); $('xrbtns').appendChild(b); xrBtn[k] = b; }
+  updateXRButtons();
+  if (PHONE && vr && !ar){ $('xrnote').textContent = '"View in VR" shows two pictures, one per eye: it is for a Cardboard viewer (the phone goes inside it). No viewer? Use Camera.'; $('xrnote').classList.remove('more'); $('xrbtns').classList.toggle('hide', false); arOK = ar; $('camrow').classList.toggle('hide', false); return; }
+  $('xrnote').textContent = (ar || vr) ? (ar ? 'AR puts the model on your real table. ' : '') + (vr ? 'VR puts you in a dark room with it.' : '')
+    : !isSecureContext ? 'AR/VR is blocked on this address (it is not secure). See "Open it on a Quest or a phone".'
+    : 'This browser cannot do AR/VR, so you get the 3D table view: drag to turn, scroll to zoom. For AR/VR see below.';
+  $('xrbtns').classList.toggle('hide', !(ar || vr));
+  arOK = ar; $('camrow').classList.toggle('hide', !(PHONE && !ar));
+}
+
+function xrFrame(frame, dt){
+  const ref = renderer.xr.getReferenceSpace(), session = renderer.xr.getSession();
+  if (firstXRFrame){ firstXRFrame = false; if (xrMode === 'vr') placeInFront(); }
+  if (xrMode === 'ar' && hitSource){
+    const hits = frame.getHitTestResults(hitSource);
+    if (hits.length){ const pose = hits[0].getPose(ref); if (pose){ reticle.visible = true; reticle.matrix.fromArray(pose.transform.matrix); } }
+    else reticle.visible = false;
+  }
+  const hp = [...session.inputSources].some(s => s.targetRayMode === 'tracked-pointer'); if (hp !== hasPointer){ hasPointer = hp; labelDirty = 1; }
+  for (const src of session.inputSources){
+    const gp = src.gamepad; if (!gp) continue;
+    const hand = src.handedness || 'none', ax = gp.axes || [], sx = ax.length >= 4 ? ax[2] : (ax[0] || 0), sy = ax.length >= 4 ? ax[3] : (ax[1] || 0);
+    if (hand === 'right' && Math.abs(sx) > 0.15) setYear(yearF = Math.max(1640, Math.min(2026, (yearF === null ? year : yearF) + sx*dt*45)));
+    if (hand === 'left' && Math.abs(sy) > 0.2) setScale(scale*(1 + sy*dt*1.2));
+    const a = !!(gp.buttons[4] && gp.buttons[4].pressed), b = !!(gp.buttons[5] && gp.buttons[5].pressed);
+    if (a && !pressed[hand + 'a']) toggleStorm(); if (b && !pressed[hand + 'b']) setYear(yearF = 2026);
+    pressed[hand + 'a'] = a; pressed[hand + 'b'] = b;
+  }
+  if (grab){
+    const p = posOf(grab.c), dy = yawOf(grab.c) - grab.y0;
+    table.position.copy(p).add(grab.t0.clone().sub(grab.p0).applyAxisAngle(Y, dy)); table.rotation.y = grab.ty0 + dy;
+  }
+}
+let yearF = null;
+
+/* ------------------------------------------------------------------ loop */
+const _sz = new THREE.Vector2();
+let lastT = 0, credT = 0, sweepN = 0;
+function loop(t, frame){
+  const dt = Math.min(0.1, Math.max(0.001, (t - lastT)/1000 || 0.016)); lastT = t;
+  const xrOn = renderer.xr.isPresenting;
+  if (xrOn){ renderer.xr.updateCamera(camera); if (frame) xrFrame(frame, dt); } else { controls.update(); tiltFrame(); yearF = null; }
+  if (tiles){
+    if (++sweepN % 90 === 0) patchScene(tiles.group);
+    tiles.group.updateWorldMatrix(true, false);
+    CU.uToLocal.value.copy(city.matrixWorld).invert();
+    if (xrOn){ renderer.getSize(_sz); tiles.setResolution(renderer.xr.getCamera(), _sz.x, _sz.y); }
+    tiles.update();
+  }
+  if (W) W.tick(t);
+  const mm = parseFloat($('srain').value) || 0;
+  rain.frame(t, dt, mm, !!(W && W.on) && mm > 0);
+  if (label.visible){ if (labelDirty){ labelDirty = 0; drawLabel(); } const c = posOf(renderer.xr.getCamera()); label.lookAt(c); }
+  if (tiles && t - credT > 2000){ credT = t;
+    try { const at = tiles.getAttributions([]); $('credits').textContent = at.map(a => a.value).filter(Boolean).join(' · ') + ' · Building years: Dirección General del Catastro (CC BY 4.0) · Terrain: © Instituto Geográfico Nacional de España (CC BY 4.0)'; } catch (e){}
+  }
+  renderer.render(scene, camera);
+}
+renderer.setAnimationLoop(loop);
+addEventListener('resize', () => {
+  if (renderer.xr.isPresenting) return;
+  camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight);
+  if (tiles) tiles.setResolutionFromRenderer(camera, renderer);
+});
+
+window.__strata8xr = {THREE, renderer, scene, camera, controls, table, city, CU, rain, label, reticle, vrRoom,
+  get tiles(){ return tiles; }, get W(){ return W; }, get year(){ return year; }, get scale(){ return scale; }, get built(){ return built; },
+  setYear, setScale, toggleStorm, enterXR, drawLabel, placeInFront, S:null};
+
+/* ------------------------------------------------------------------ start */
+setupXRButtons(); setScale(scale); setYear(year); rv();
+let token = null; try { token = localStorage.getItem('strata8.ion'); } catch (e){}
+if (token) startTiles(token);
+else { $('tok').classList.remove('hide'); say('waiting for the token'); }
+$('toksave').addEventListener('click', () => {
+  const v = $('tokin').value.trim(); if (!v) return;
+  try { localStorage.setItem('strata8.ion', v); } catch (e){}
+  $('tok').classList.add('hide'); if (!tiles) startTiles(v); else location.reload();
+});
+</script>
+<script src="strata-perf.js" defer></script>
+</body>
+</html>
