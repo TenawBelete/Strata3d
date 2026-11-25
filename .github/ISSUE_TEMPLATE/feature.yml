@@ -1,0 +1,23 @@
+name: Feature request
+description: Propose a user-visible capability or technical improvement.
+title: "feature: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What user problem should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired result
+      description: Describe how someone can tell the feature works.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Location, constraints, or references

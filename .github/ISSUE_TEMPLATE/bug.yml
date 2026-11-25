@@ -1,0 +1,48 @@
+name: Bug report
+description: Report a reproducible problem in Strata3d.
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: Please check existing issues first. Never include credentials or private footage.
+  - type: input
+    id: location
+    attributes:
+      label: Page or scene
+      description: Include the page, scene, and URL parameters if relevant.
+      placeholder: Plaza Mayor Run
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: Click the scene, press W, then turn right...
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and device
+      placeholder: Chrome version, macOS version, GPU if known
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshots or console errors
+      description: Add relevant captures. Remove personal data first.
