@@ -1,0 +1,42 @@
+name: Visual or movement defect
+description: Report a rendering, geometry, alignment, lighting, or movement issue.
+title: "visual: "
+labels:
+  - visual
+body:
+  - type: markdown
+    attributes:
+      value: Use public imagery you have permission to share. Never attach private footage or credentials.
+  - type: input
+    id: scene
+    attributes:
+      label: Scene and URL
+      placeholder: Plaza Mayor courtyard
+    validations:
+      required: true
+  - type: textarea
+    id: camera
+    attributes:
+      label: Camera position and reproduction steps
+      description: Include starting point, direction, movement keys, and where the defect appears.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected appearance or movement
+    validations:
+      required: true
+  - type: textarea
+    id: captures
+    attributes:
+      label: Evidence
+      description: Include the same view before/after if comparing versions, plus a forward, sideways, or turned view. Credit source imagery.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and device
+    validations:
+      required: true

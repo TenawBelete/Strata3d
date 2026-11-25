@@ -1,0 +1,6 @@
+# The repository owner reviews sensitive project controls and provenance.
+/.github/ @TenawBelete
+/tools/capture/ @TenawBelete
+/captures/ @TenawBelete
+/data/ @TenawBelete
+/vendor/ @TenawBelete
