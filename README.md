@@ -4,9 +4,25 @@ Strata explores real places in a browser. Earth provides the globe, flight and g
 
 The original Strata source code and documentation are available under the [MIT License](LICENSE). Third-party software keeps its upstream terms. Scene assets and datasets in `data/` and `captures/` require their own permissions. See [public release readiness](docs/public-release.md) for notices and the remaining asset review.
 
-## Run on your Mac
+## Project at a glance
 
-From this folder run `python3 -m http.server 8001 --bind 127.0.0.1`. Open [Earth](http://127.0.0.1:8001/) and choose **Photographic courtyard** or open [the courtyard directly](http://127.0.0.1:8001/panaderia.html?present=1&mode=run). Use WASD to move and drag to turn. The **Time and weather** panel records the hour, rain and cloud fraction in the URL. Current Madrid weather requires internet access. The existing Earth flight and other online layers require their respective services.
+| Component | Purpose |
+| --- | --- |
+| Earth | Explore geospatial layers and transition from globe flight to ground navigation. |
+| Plaza Mayor | Walk through a photographic courtyard and evaluate façade, pavement, and lighting quality at eye level. |
+| Capture pipeline | Convert video into a textured mesh and registered camera poses, then inspect the reconstruction from new viewpoints. |
+
+The browser application and capture builder are separate. Existing captures can be viewed in a modern WebGL browser. Producing new captures requires the RealityKit toolchain described below.
+
+## Developer quickstart
+
+With Python 3 available, serve the project over HTTP from the repository root:
+
+```sh
+python3 -m http.server --bind 127.0.0.1 8001
+```
+
+Open the server origin and select **Photographic courtyard** or **Explore captures**. Earth flight and live weather use external services. The photographed courtyard can be explored without an account.
 
 ### Keyboard and mouse controls
 
@@ -21,7 +37,7 @@ Click inside the 3D view before using the keyboard. If you just used a search fi
 
 ## Reconstruct a new take
 
-Requires a Mac supporting RealityKit Object Capture, macOS 14 or newer, Xcode Command Line Tools, Python 3.11 or newer, and FFmpeg. Run `xcrun swiftc --version` and `python3 --version` to check the tools. On a fresh Mac with Homebrew, run `brew install ffmpeg`. This Mac also has a local executable under .tools. Set FFMPEG to select an exact executable. SDKROOT can select a compatible SDK.
+The capture builder requires macOS 14 or later on hardware that supports RealityKit Object Capture, Xcode Command Line Tools, Python 3.11+, and FFmpeg. Set `FFMPEG` to select a specific executable or `SDKROOT` to select a compatible SDK.
 
 Start with one shopfront, arch or paving section. Film one continuous pass at native resolution. Walk sideways as well as forwards, return along a different path, and keep the same stonework in consecutive frames. Include both sides of columns, corners and recesses. Capture the façade and ground from several distances under consistent light. Moving crowds, edits, zoom changes and rotation from one fixed spot reduce usable coverage. Reserve a few separately captured viewpoints for checking the result.
 
@@ -30,7 +46,7 @@ python3 tools/capture/build.py "/path/to/your-take.mov" arcade-v1 \
   --fps 2 --detail medium --source "Creator, location, date, and footage rights"
 ```
 
-Open [the capture viewer](http://127.0.0.1:8001/capture.html?scene=arcade-v1). Drag to turn, use WASD to translate and Q/E to change height. Return to camera start restores the estimated opening camera. Coordinates and movement speed are relative to the reconstruction. Survey scale, alignment with Earth and collision surfaces need independent measurements before treating the result as a mapped walk.
+Open `capture.html?scene=arcade-v1` on the same server. Drag to turn, use WASD to translate and Q/E to change height. Return to camera start restores the estimated opening camera. Coordinates and movement speed are relative to the reconstruction. Survey scale, alignment with Earth and collision surfaces need independent measurements before treating the result as a mapped walk.
 
 The builder extracts sequential full-resolution JPEGs, asks RealityKit for camera poses and a textured OBJ, validates the material and texture references, and writes the finished package to `captures/arcade-v1/`. It records each input SHA-256, sampling rate, frame count, detail level and toolchain versions in scene.json. A failed build leaves no selectable partial scene. Use a new scene identifier to compare revisions. The source clip is not copied. Reconstruction can vary with hardware and framework version.
 
@@ -47,10 +63,10 @@ The output directory must be new. The builder stages the app pages, runtime modu
 
 Use a private GitHub repository with `main` as the default branch. The workflow builds and runs the courtyard browser smoke test on pull requests and pushes to main. Deployment requires enabling **Settings → Pages → GitHub Actions** and manually running **Validate and deploy Strata** from main. Only the deployment job receives Pages write and OIDC permissions. Review site visibility and account eligibility before publishing. GitHub Pages may expose a site publicly even when its source repository is private.
 
-For a local visual smoke test, run the site and start an isolated Chrome instance:
+For a visual smoke test, serve the site and set `CHROME_BIN` to your Chrome executable:
 
 ```sh
-"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --remote-debugging-port=9296 --user-data-dir="$(mktemp -d)" about:blank &
+"$CHROME_BIN" --remote-debugging-port=9296 --user-data-dir="$(mktemp -d)" about:blank &
 STRATA_URL=http://127.0.0.1:8001/ node tools/check-courtyard.mjs
 ```
 
