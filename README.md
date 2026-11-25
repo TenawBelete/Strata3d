@@ -2,6 +2,8 @@
 
 Strata explores real places in a browser. Earth provides the globe, flight and geospatial layers. The photographic Plaza Mayor courtyard opens without an account. A separate reconstruction pipeline converts a video take into textured geometry and camera poses for free exploration.
 
+The original Strata source code and documentation are available under the [MIT License](LICENSE). Third-party software keeps its upstream terms. Scene assets and datasets in `data/` and `captures/` require their own permissions. See [public release readiness](docs/public-release.md) for notices and the remaining asset review.
+
 ## Run on your Mac
 
 From this folder run `python3 -m http.server 8001 --bind 127.0.0.1`. Open [Earth](http://127.0.0.1:8001/) and choose **Photographic courtyard** or open [the courtyard directly](http://127.0.0.1:8001/panaderia.html?present=1&mode=run). Use WASD to move and drag to turn. The **Time and weather** panel records the hour, rain and cloud fraction in the URL. Current Madrid weather requires internet access. The existing Earth flight and other online layers require their respective services.
