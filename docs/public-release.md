@@ -34,3 +34,16 @@ Madrid's ArcGIS item for the textured mesh contains no license or attribution te
 IGN publishes reuse conditions compatible with CC BY 4.0 for covered datasets. Confirm the exact products and any layer-specific credits before including the processed imagery or elevation files. [IGN data policy](https://www.ign.es/web/politica-datos)
 
 The asset-excluded public release is [Eutopia4D](https://github.com/TenawBelete/Eutopia4D). Add assets there only once they are cleared, together with their license and attribution records.
+
+## Verified license terms
+
+| Material or source | Terms to carry forward |
+| --- | --- |
+| Original Strata code and documentation | [MIT](../LICENSE). Retain the copyright and permission notice. |
+| Three.js | [Upstream MIT](../vendor/three/LICENSE). Retain the upstream copyright and license notice. |
+| Draco | [Apache 2.0 and bundled notices](../vendor/draco/LICENSE). Preserve applicable notices, include the license, and identify modifications where required. |
+| Björn S.'s 2016 source photograph | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/). Credit the creator, link the source and license, and preserve share-alike terms for distributed adaptations. |
+| Nemo's 2020 source photograph | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Credit the creator, link the source and license, indicate modifications, and apply share-alike terms to distributed adaptations. |
+| Covered IGN products | Follow [IGN's data policy](https://www.ign.es/web/politica-datos), including product-specific source credit. Confirm which terms apply to each exported layer. |
+
+The source photographs and their processing notes are listed in the [survey source record](../data/plaza-mayor-survey-source.json). Confirm the mapping from the source photographs to every file carrying their pixels before shipping those files. No redistribution license has been verified for the exact Madrid mesh or the remaining undocumented textures.
