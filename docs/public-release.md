@@ -24,3 +24,13 @@ Review open and closed issues, pull requests, workflow logs, and artifacts for p
 - **Open-Meteo:** Weather data is CC BY 4.0 with attribution. The free hosted API is for noncommercial use. Verify the hosted plan before commercial deployment. [Open-Meteo](https://open-meteo.com/)
 - **External models and street imagery:** The Earth mode references Khronos sample models, Three.js examples, and Mapillary imagery. Review each model's credits and the imagery terms before copying these into the repository or packaging them in a release.
 - **Apple RealityKit and FFmpeg:** These are tools used to build captures. Keep their binaries outside the release and audit the footage and resulting assets separately.
+
+## Asset inventory and release scope
+
+The [file-level inventory](asset-inventory.csv) covers tracked data and capture files on the reviewed branch. A hold means the file stays outside public exports until its provenance, applicable terms, and any attribution are verified. It does not establish that the material is prohibited.
+
+Madrid's ArcGIS item for the textured mesh contains no license or attribution text. Madrid publishes reuse terms for a separate 3D building dataset. Those terms alone do not establish the rights to the exact textured tiles used here. [Textured mesh item](https://www.arcgis.com/home/item.html?id=d8bcbe7422a048a6837dafad300ef2be) · [Separate building dataset](https://geoportal.madrid.es/IDEAM_WBGEOPORTAL/dataset.iam?id=ece2d15a-d16f-46e8-aaec-9576771b9997)
+
+IGN publishes reuse conditions compatible with CC BY 4.0 for covered datasets. Confirm the exact products and any layer-specific credits before including the processed imagery or elevation files. [IGN data policy](https://www.ign.es/web/politica-datos)
+
+The asset-excluded public release is [Eutopia4D](https://github.com/TenawBelete/Eutopia4D). Add assets there only once they are cleared, together with their license and attribution records.
