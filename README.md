@@ -2,7 +2,7 @@
 
 Strata explores real places in a browser. Earth provides the globe, flight and geospatial layers. The photographic Plaza Mayor courtyard opens without an account. A separate reconstruction pipeline converts a video take into textured geometry and camera poses for free exploration.
 
-See [public release readiness](docs/public-release.md) for the code license and asset permissions that must be resolved before redistribution.
+The original Strata source code and documentation are available under the [MIT License](LICENSE). Third-party software keeps its upstream terms. Scene assets and datasets in `data/` and `captures/` require their own permissions. See [public release readiness](docs/public-release.md) for notices and the remaining asset review.
 
 ## Run on your Mac
 

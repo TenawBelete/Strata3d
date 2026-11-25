@@ -1,10 +1,10 @@
 # Public release readiness
 
-Strata3d is preparing an open source release. The maintainer must select a license for the original project code. Third-party code and scene assets retain their own terms.
+Strata3d is preparing an open source release. The [MIT License](../LICENSE) applies to original Strata source code and documentation. Third-party code, imagery, geometry, textures, datasets, and capture outputs retain their own terms. An asset without a verified redistribution grant is pending review.
 
 | Material | Evidence in this repository | Remaining decision |
 | --- | --- | --- |
-| Original Strata code | No root license | Confirm ownership and choose a code license |
+| Original Strata code and documentation | [MIT License](../LICENSE) selected by the maintainer | Preserve the copyright and license text in redistributed copies |
 | Three.js | [Bundled license](../vendor/three/LICENSE) | Preserve its copyright and license notice |
 | Bundled Draco decoder | [Bundled Apache 2.0 license](../vendor/draco/LICENSE) | Confirm the exact decoder build and any additional notices before release |
 | Plaza Mayor reference photos | [Survey source records](../data/plaza-mayor-survey-source.json) identify the 2016 and 2020 sources and their CC BY-SA licenses | Map derived files to the correct source and record attribution and share-alike terms |
