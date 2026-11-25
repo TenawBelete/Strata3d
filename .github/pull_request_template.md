@@ -9,6 +9,7 @@
 - [ ] Any dependency change includes its version, source, license, and security review.
 - [ ] Any new asset includes its source, creator, license, and processing notes.
 - [ ] Any material AI-generated contribution is disclosed below with its verification.
+- [ ] Security reports use the private contact process in `SECURITY.md`.
 
 Checks run and results:
 

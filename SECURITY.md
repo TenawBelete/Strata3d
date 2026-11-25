@@ -2,7 +2,7 @@
 
 ## Reporting a vulnerability
 
-Please do not report a security vulnerability in a public issue, discussion, or pull request. Use GitHub's private vulnerability reporting for this repository when it is enabled. If it is unavailable, contact the repository owner through GitHub and ask for a private channel.
+Please do not report a security vulnerability in a public issue, discussion, or pull request. This repository is currently private, and GitHub's private vulnerability reporting form is available for public repositories. While this repository remains private, contact [the repository owner through GitHub](https://github.com/TenawBelete) and ask for a private channel. If the repository becomes public, the maintainer should enable GitHub private vulnerability reporting and update this policy.
 
 Include the affected version or commit, the impact, and steps to reproduce. Avoid sending real credentials, personal data, or footage you do not have permission to share.
 
