@@ -6,6 +6,17 @@ Strata explores real places in a browser. Earth provides the globe, flight and g
 
 From this folder run `python3 -m http.server 8001 --bind 127.0.0.1`. Open [Earth](http://127.0.0.1:8001/) and choose **Photographic courtyard** or open [the courtyard directly](http://127.0.0.1:8001/panaderia.html?present=1&mode=run). Use WASD to move and drag to turn. The **Time and weather** panel records the hour, rain and cloud fraction in the URL. Current Madrid weather requires internet access. The existing Earth flight and other online layers require their respective services.
 
+### Keyboard and mouse controls
+
+Click inside the 3D view before using the keyboard. If you just used a search field or a weather control, click the scene again.
+
+| View | Move | Look | Other controls |
+| --- | --- | --- | --- |
+| Earth · Fly low | W/A/S/D; Q rises, E descends | Drag; Left/Right turn, Up/Down tilt | Hold Shift to move faster; Esc exits low flight |
+| Earth · Run | W/A/S/D | Drag or use Left/Right to turn | Hold Shift to sprint; Space jumps; use **Take off** to return to flight |
+| Photographic courtyard | W/A/S/D | Drag or use Left/Right to turn | Hold Shift to move faster in the square; Space jumps in courtyard Run mode |
+| Explore captures | W/A/S/D; Q descends, E rises | Drag or use Left/Right to turn | **Return to camera start** restores the opening camera |
+
 ## Reconstruct a new take
 
 Requires a Mac supporting RealityKit Object Capture, macOS 14 or newer, Xcode Command Line Tools, Python 3.11 or newer, and FFmpeg. Run `xcrun swiftc --version` and `python3 --version` to check the tools. On a fresh Mac with Homebrew, run `brew install ffmpeg`. This Mac also has a local executable under .tools. Set FFMPEG to select an exact executable. SDKROOT can select a compatible SDK.
