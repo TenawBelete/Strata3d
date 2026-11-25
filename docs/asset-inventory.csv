@@ -1,0 +1,110 @@
+path,source_record,terms_evidence,public_release_status,next_action
+captures/release.json,Repository capture catalog,Original configuration,eligible,Catalog is empty at review
+data/calle-mayor/buildings.json,,Unverified,hold,Identify original source and verify terms before inclusion
+data/calle-mayor/route.json,,Unverified,hold,Identify original source and verify terms before inclusion
+data/calle-mayor/surface.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/entrance/landing.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/entrance/pier.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/entrance/portal.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/entrance/shop.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/entrance/stair.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/entrance/storefront.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/entrance/vault.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/ground-AMS_1956-1957.jpg,data/plaza-mayor-grounds.json,IGN policy compatible with CC BY 4.0 if covered,hold,Confirm terms and attribution for this historical layer
+data/ground-PNOA2006.jpg,data/plaza-mayor-grounds.json,IGN policy compatible with CC BY 4.0 if covered,hold,Confirm terms and attribution for this historical layer
+data/ground-PNOA2009.jpg,data/plaza-mayor-grounds.json,IGN policy compatible with CC BY 4.0 if covered,hold,Confirm terms and attribution for this historical layer
+data/ground-PNOA2011.jpg,data/plaza-mayor-grounds.json,IGN policy compatible with CC BY 4.0 if covered,hold,Confirm terms and attribution for this historical layer
+data/ground-PNOA2014.jpg,data/plaza-mayor-grounds.json,IGN policy compatible with CC BY 4.0 if covered,hold,Confirm terms and attribution for this historical layer
+data/ground-PNOA2017.jpg,data/plaza-mayor-grounds.json,IGN policy compatible with CC BY 4.0 if covered,hold,Confirm terms and attribution for this historical layer
+data/ground-SIGPAC.jpg,data/plaza-mayor-grounds.json,IGN policy compatible with CC BY 4.0 if covered,hold,Confirm terms and attribution for this historical layer
+data/market-route/asphalt.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/market-route/cafe.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/market-route/cream.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/market-route/cycle-mark.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/market-route/market-glass.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/market-route/market-iron.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/market-route/market-sign.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/market-route/museum.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/market-route/pharmacy.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/market-route/rose.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/market-route/square-stone.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/market-route/stone-house.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/market-route/tavern.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/market-route/town-hall.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/market-route/turret.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/market-route/villa-end.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/market-route/villa-left.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/market-route/villa-tower.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/market-route/yellow-house.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia-arcade-indices.bin,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia-arcade-surface.bin,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/courtyard-east.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/courtyard-north.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/courtyard-walk-clean.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/courtyard-walk-registered.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/courtyard-west.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/exterior-source.json,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/exterior.glb,data/panaderia/exterior-source.json,Unverified,hold,Obtain terms for exact municipal mesh and embedded textures
+data/panaderia/felipe-front.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/felipe-iii.glb,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/gabaldon-reference.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/paving-sample.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/plaza-east-arcade.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/plaza-east-frontage.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/plaza-north-arcade.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/plaza-north-frontage.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/plaza-openings.json,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/plaza-south-arcade.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/plaza-south-frontage.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/plaza-west-arcade.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/plaza-west-frontage.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/rear-windows-frontage.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/rear-windows.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/stone-return.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/walk-east.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/walk-south.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/panaderia/walk-west.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-arcade-detail.bin,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-arcade-isolated.bin,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-arcade-triangles.bin,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-facade-detail.bin,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-facade-isolated.bin,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-facade-triangles.bin,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-floor-offsets.bin,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-interior/cobbles.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-interior/east.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-interior/north-arcades.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-interior/north.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-interior/south.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-interior/west.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-mayor-arcade.bin,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-mayor-dem-512.f32,data/plaza-mayor-local.json,IGN policy compatible with CC BY 4.0 if covered,hold,Confirm exact product terms and document transformed elevation data
+data/plaza-mayor-grounds.json,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-mayor-local.json,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-mayor-madrid.json,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-mayor-ortho-2024.jpg,data/plaza-mayor-ortho-2024.json,Unverified,hold,Confirm terms for exact municipal imagery layer
+data/plaza-mayor-ortho-2024.json,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-mayor-ortho-2048.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-mayor-ortho-4096.jpg,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-mayor-panorama-2016.jpg,data/plaza-mayor-survey-source.json,CC BY-SA 3.0,hold,Confirm file mapping and include Björn S. credit and adaptation notice
+data/plaza-mayor-survey-source.json,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-mayor-survey.bin,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-panaderia-centre-2020.jpg,data/plaza-mayor-survey-source.json,CC BY-SA 4.0,hold,Confirm derived file mapping and include Nemo credit and adaptation notice
+data/plaza-paving-photo-2020.webp,data/plaza-mayor-survey-source.json,CC BY-SA 4.0,hold,Confirm derived file mapping and include Nemo credit and adaptation notice
+data/plaza-road/balcony.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-road/cornice.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-road/door.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-road/granite.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-road/junction.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-road/opposite.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-road/red-corner.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-road/shop.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-road/side-paving.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-road/sign.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-road/street-stone.webp,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-roof-survey.json,,Unverified,hold,Identify original source and verify terms before inclusion
+data/plaza-walkable.bin,,Unverified,hold,Identify original source and verify terms before inclusion
+data/stars-bsc5.json,,Unverified,hold,Identify original source and verify terms before inclusion
+data/tm-plaza-mayor-cover.png,,Unverified,hold,Identify original source and verify terms before inclusion
+data/tm-plaza-mayor-years.png,,Unverified,hold,Identify original source and verify terms before inclusion
+data/tm-plaza-mayor.json,,Unverified,hold,Identify original source and verify terms before inclusion
